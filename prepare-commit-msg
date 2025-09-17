@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Get the branch name
+BRANCH_NAME=$(git branch --show-current)
+
+# Extract the first part of the branch name (e.g., DEVOPS-1234)
+PARTIAL_BRANCH_NAME=${BRANCH_NAME%%/*}
+
+# Check if the branch name contains a slash to ensure we're not on a main branch
+if [[ $BRANCH_NAME == *"/"* ]]; then
+  # Check if the commit message already contains the partial branch name
+  if ! grep -qE "\[$PARTIAL_BRANCH_NAME\]" "$1"; then
+    # Append the partial branch name to the commit message
+    sed -i.bak -e "s/$/\n\n[$PARTIAL_BRANCH_NAME]/" "$1"
+  fi
+fi
+
+exit 0

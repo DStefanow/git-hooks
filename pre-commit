@@ -1,0 +1,9 @@
+#!/bin/bash
+
+git diff --staged --name-only | while read file; do
+	if [[ "{$file}" =~ \.yaml ]]; then
+		yamllint "${file}"
+	fi
+done
+
+exit 0
